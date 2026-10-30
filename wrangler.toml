@@ -1,0 +1,43 @@
+# Flappy Mail: one Worker serves the site (static assets from Vite's dist/) and the API.
+name = "flappy-mail"
+main = "worker/index.ts"
+compatibility_date = "2026-10-01"
+
+# flappymail.net and www (which redirects to flappymail.net). These need the domain's DNS on Cloudflare.
+routes = [
+  { pattern = "flappymail.net", custom_domain = true },
+  { pattern = "www.flappymail.net", custom_domain = true },
+]
+
+# Served only at flappymail.net (no separate workers.dev test address).
+workers_dev = false
+preview_urls = false
+
+# Logs in the Cloudflare dashboard (free).
+[observability]
+enabled = true
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"
+run_worker_first = ["/api/*", "/dev/*", "/l/*", "/block/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "flappy-mail"
+database_id = "e0ffbaa3-c11a-465f-baf7-f7b85bbc212a"
+migrations_dir = "migrations"
+
+# The email scheduler (step 5).
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+ENVIRONMENT = "production"
+SITE_URL = "https://flappymail.net"
+MAIL_FROM = "Flappy Mail <birds@flappymail.net>"
+COOP_CAP = "1000"
+# The Turnstile site key is public; the secret is set with `wrangler secret put TURNSTILE_SECRET`.
+TURNSTILE_SITE_KEY = "0x4AAAAAAFoPHVqD50n-z4XQ"

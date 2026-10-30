@@ -1,0 +1,37 @@
+.cutscene { position: fixed; inset: 0; z-index: 100; background: #120A24; display: flex; align-items: center; justify-content: center; }
+.cutscene .stage { position: relative; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; overflow: hidden; }
+.scene-canvas { position: absolute; inset: 0; image-rendering: pixelated; }
+.scene-hud { position: absolute; left: 32px; right: 32px; top: 24px; display: flex; flex-direction: column; gap: 10px; }
+.scene-bar { height: 24px; border: 4px solid var(--mustard); background: var(--plum); padding: 4px; box-shadow: 0 0 0 4px var(--brick); }
+.scene-bar i { display: block; height: 100%; background: var(--brick-hi); }
+.scene-boxes { display: flex; gap: 12px; flex-wrap: wrap; }
+.scene-boxes div { border: 4px solid var(--mustard); background: var(--brick); padding: 8px 12px; font-size: 11px; color: var(--cream); }
+.scene-dialog {
+  position: absolute; left: 32px; right: 32px; bottom: 28px; min-height: 118px; border: 4px solid var(--mustard); background: var(--plum);
+  box-shadow: 0 0 0 4px var(--brick); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 24px;
+}
+.scene-text { color: var(--cream); font-size: 28px; line-height: 1.2; }
+.scene-text .who { font-size: 12px; color: var(--amber); }
+.caret { color: var(--mustard); animation: blink 0.8s steps(2) infinite; }
+.scene-btns { display: flex; gap: 12px; flex-shrink: 0; }
+.scene-sound { font-size: 14px; width: 52px; height: 52px; background: var(--brick); color: var(--mustard); border: 4px solid var(--mustard); }
+.scene-skip { font-size: 12px; padding: 0 18px; height: 52px; background: var(--mustard); color: var(--plum); border: 4px solid var(--plum); box-shadow: 0 0 0 4px var(--mustard); }
+.scene-banner {
+  position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); font-size: clamp(16px, 3vw, 32px); color: var(--mustard);
+  text-shadow: 4px 4px 0 var(--brick), 8px 8px 0 var(--panel); white-space: nowrap; animation: blink 0.6s steps(2) 3;
+}
+.scene-banner[hidden] { display: none; }
+
+/* phones: the same scene cropped to portrait, dialogue full width */
+@media (max-aspect-ratio: 4/5) {
+  .cutscene .stage { width: 100vw; height: 100vh; height: 100dvh; aspect-ratio: auto; }
+  .scene-hud { left: 12px; right: 12px; top: 12px; }
+  .scene-boxes { gap: 8px; }
+  .scene-boxes div { font-size: 8px; padding: 6px 8px; border-width: 3px; }
+  .scene-dialog { left: 0; right: 0; bottom: 0; border-width: 4px 0 0; box-shadow: none; flex-direction: column; align-items: stretch; gap: 14px; padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); min-height: 0; }
+  .scene-text { font-size: 24px; min-height: 3.6em; }
+  .scene-btns { justify-content: flex-end; }
+  .scene-sound { width: 48px; height: 48px; }
+  .scene-skip { height: 48px; }
+  .scene-banner { font-size: 16px; top: 34%; }
+}

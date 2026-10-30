@@ -1,0 +1,97 @@
+/* Flappy Mail: one limited palette, taken from the mockups. */
+:root {
+  /* ink + daytime */
+  --ink: #2E2A40;
+  --ink-deep: #14101F;
+  --sky: #5C94FC;
+  --parchment: #F6E7C1;
+  --paper: #FFF8E4;
+  --paper-line: #E9D7A6;
+  --paper-text: #6B5A3A;
+  --grass: #7ED348;
+  --grass-dark: #3E8E41;
+  --dirt: #8B5A2B;
+  --white: #FFFFFF;
+  --field: #F4F4FA;
+  --teal: #5EC7C2;
+  /* warm HUD duotone */
+  --mustard: #FFD46B;
+  --amber: #F7C46A;
+  --cream: #FFE9A8;
+  --brick: #8E1B1B;
+  --brick-hi: #A3161F;
+  --plum: #3D1530;
+  --panel: #2A0F24;
+  --panel-shadow: #0E0710;
+  --muted: #B9A6C8;
+  --send: #E4574A;
+  --send-deep: #7E1019;
+  --tag: #E8E4F5;
+  --gold-deep: #8E5A22;
+
+  --f-pixel: 'Press Start 2P', monospace;
+  --f-body: 'VT323', monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--f-body); background: var(--panel); color: var(--cream); -webkit-font-smoothing: none; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.px { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.pixel { font-family: var(--f-pixel); }
+:focus-visible { outline: 3px solid var(--mustard); outline-offset: 2px; }
+
+/* ---------- warm HUD pieces (map, cutscenes) ---------- */
+.hud-btn {
+  font-family: var(--f-pixel); font-size: 9px; min-height: 44px; padding: 0 12px;
+  background: var(--brick); color: var(--cream); border: 3px solid var(--mustard);
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; white-space: nowrap;
+}
+.hud-btn.icon { width: 44px; padding: 0; font-size: 12px; background: var(--plum); color: var(--mustard); }
+.hud-btn.gold { background: var(--mustard); color: var(--plum); border-color: var(--ink-deep); box-shadow: 0 4px 0 var(--gold-deep); }
+.hud-btn.send { background: var(--send); color: #fff; font-size: 11px; box-shadow: 0 4px 0 var(--send-deep); }
+.hud-btn:active, .game-btn:active { transform: translateY(4px); box-shadow: none !important; }
+
+.frame {
+  background: var(--panel); border: 4px solid var(--mustard); box-shadow: 6px 6px 0 var(--panel-shadow);
+}
+.stat-box { background: var(--plum); border: 2px solid var(--brick); padding: 6px 8px; }
+.stat-box .k { font-family: var(--f-pixel); font-size: 7px; color: var(--amber); }
+.stat-box .v { font-family: var(--f-pixel); font-size: 11px; color: var(--cream); margin-top: 6px; }
+.stat-box.big { background: var(--brick); border: 3px solid var(--mustard); padding: 8px; }
+.stat-box.big .v { font-size: 12px; }
+.bar { height: 14px; border: 3px solid var(--mustard); background: var(--plum); padding: 2px; }
+.bar > i { display: block; height: 100%; background: var(--send); }
+.bar.thick { height: 18px; }
+.bar.thick > i { background-image: repeating-linear-gradient(90deg, #A3161F 0 10px, #C2272F 10px 13px); }
+
+/* ---------- bright daytime pieces (compose, letter) ---------- */
+.game-btn {
+  font-family: var(--f-pixel); font-size: 18px; padding: 20px; min-height: 64px; width: 100%;
+  background: var(--send); color: #fff; border: 4px solid var(--ink);
+  box-shadow: 0 8px 0 var(--send-deep), 8px 8px 0 var(--ink); text-shadow: 3px 3px 0 var(--send-deep);
+}
+.game-btn:disabled, .game-btn.out { background: #8E93AD; box-shadow: 0 8px 0 #5C6080, 8px 8px 0 var(--ink); text-shadow: 3px 3px 0 #5C6080; cursor: not-allowed; }
+.chip-btn {
+  font-family: var(--f-pixel); font-size: 9px; padding: 0 10px; min-height: 44px; background: #fff;
+  border: 3px solid var(--ink); color: var(--ink);
+}
+.day-panel { background: #fff; border: 4px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+
+/* tap-for-sound hint */
+.sound-hint {
+  position: absolute; z-index: 60; font-family: var(--f-pixel); font-size: 8px; color: var(--plum); background: var(--mustard);
+  border: 3px solid var(--ink-deep); padding: 6px 8px; cursor: pointer; animation: blink 1.2s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .sound-hint { animation: none; } }
+
+.demo-flag {
+  position: fixed; z-index: 90; right: 0; top: 0; font-family: var(--f-pixel); font-size: 6px;
+  background: #fff; color: var(--ink); border: 2px solid var(--ink); padding: 2px 4px; opacity: .85; pointer-events: none;
+}
+
+.credits { font-family: var(--f-body); font-size: 16px; margin: 0; opacity: .85; }
+.credits a { color: inherit; }

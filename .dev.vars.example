@@ -1,0 +1,16 @@
+# Copy to .dev.vars for local development. Never used in production.
+ENVIRONMENT=development
+SITE_URL=http://localhost:5173
+# Dev-only time warp: 3600 means one trip-hour passes in one real second. Ignored in production.
+TIME_WARP=1
+# Dev-only: 1 makes every new letter get lost (at a random point, like a real loss).
+FORCE_LOSS=0
+# Dev-only: shrink the coop to test "ALL PIGEONS ARE OUT".
+COOP_CAP=1000
+# Leave empty to keep emails in the local outbox (/dev/outbox) instead of sending them.
+RESEND_API_KEY=
+# Cloudflare Turnstile's official test keys: the invisible check always passes. Real keys go in production only.
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+# 5 letters a day per sender, 3 a day per recipient. Set to off for a local load test (npm run seed).
+RATE_LIMITS=on

@@ -1,0 +1,9 @@
+node_modules
+dist
+data/raw
+.dev.vars
+.wrangler
+
+# Kept on this computer only
+scripts/demo-birds.ts
+.claude

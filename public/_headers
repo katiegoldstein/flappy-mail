@@ -1,0 +1,9 @@
+# Security headers for every page. The tracking and letter links carry secret tokens,
+# so no page ever sends a Referer to another site.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Permissions-Policy: geolocation=(self), camera=(), microphone=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; frame-src https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com; base-uri 'none'; form-action 'self'; frame-ancestors 'none'
