@@ -36,12 +36,11 @@ export function logo(scale = 2) {
 
 export const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
 
-// Sound: off by default (phones only allow it after a tap anyway), remembered. Even when it's remembered on,
-// nothing can play until the browser lets audio start on the first tap, so until then it shows as off with
-// a "tap for sound" hint.
+// Sound: on by default, remembered. Browsers only let audio start after the first tap or key press, so until
+// then it shows as off with a "tap for sound" hint, and that first tap starts it.
 const soundListeners: ((on: boolean) => void)[] = [];
 let audioReady = false;
-export function soundOn() { return prefs.get('sound', 'off') === 'on'; }
+export function soundOn() { return prefs.get('sound', 'on') === 'on'; }
 export const soundLive = () => audioReady && soundOn(); // actually playing
 export function setSound(on: boolean) { prefs.set('sound', on ? 'on' : 'off'); soundListeners.forEach(f => f(on)); }
 export function onSound(f: (on: boolean) => void) { soundListeners.push(f); }
