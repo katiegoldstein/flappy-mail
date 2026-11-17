@@ -36,28 +36,39 @@ export function logo(scale = 2) {
 
 export const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
 
-// Sound: off by default (phones only allow it after a tap anyway), remembered. While it's off we show a "tap for sound" hint.
+// Sound: off by default (phones only allow it after a tap anyway), remembered. Even when it's remembered on,
+// nothing can play until the browser lets audio start on the first tap, so until then it shows as off with
+// a "tap for sound" hint.
 const soundListeners: ((on: boolean) => void)[] = [];
+let audioReady = false;
 export function soundOn() { return prefs.get('sound', 'off') === 'on'; }
+export const soundLive = () => audioReady && soundOn(); // actually playing
 export function setSound(on: boolean) { prefs.set('sound', on ? 'on' : 'off'); soundListeners.forEach(f => f(on)); }
 export function onSound(f: (on: boolean) => void) { soundListeners.push(f); }
+// Called by audio.ts once the browser has let audio start.
+export function setAudioReady() { audioReady = true; soundListeners.forEach(f => f(soundOn())); }
 
 export function soundButton(cls: string, variant: 'icon' | 'text' = 'icon'): HTMLButtonElement {
   const b = h('button', { type: 'button', class: cls }) as HTMLButtonElement;
-  const paint = (on: boolean) => {
+  const paint = () => {
+    const on = soundLive();
     b.setAttribute('aria-pressed', String(on));
     b.setAttribute('aria-label', on ? 'Sound on' : 'Sound off');
     b.textContent = variant === 'text' ? (on ? 'SOUND: ON' : 'SOUND: OFF') : on ? '♪' : '×';
   };
-  paint(soundOn());
+  paint();
   onSound(paint);
-  b.addEventListener('click', () => setSound(!soundOn()));
+  // A press that unlocks audio always means "sound on", even if it was remembered on (and so already set).
+  // Audio is unlocked during the press itself, so check before it lands.
+  let lockedAtPress = false;
+  for (const ev of ['pointerdown', 'keydown']) b.addEventListener(ev, () => { lockedAtPress = !audioReady; });
+  b.addEventListener('click', () => { setSound(lockedAtPress || !soundOn()); lockedAtPress = false; });
   return b;
 }
 
 let hinted = false;
 export function tapForSoundHint(anchor: HTMLElement) {
-  if (hinted || soundOn()) return;
+  if (hinted || soundLive()) return;
   hinted = true;
   const hint = h('div', { class: 'sound-hint', 'aria-hidden': 'true' }, 'TAP FOR SOUND');
   document.body.append(hint);
@@ -68,12 +79,12 @@ export function tapForSoundHint(anchor: HTMLElement) {
   };
   requestAnimationFrame(place);
   addEventListener('resize', place);
-  // Tapping the hint turns sound on; it goes away once sound is on, or when the visitor taps anything else.
+  // Tapping the hint turns sound on; it goes away once sound is playing, or when the visitor taps anything else.
   hint.addEventListener('click', () => setSound(true));
   const done = () => { hint.remove(); removeEventListener('pointerdown', away); removeEventListener('resize', place); };
   const away = (e: Event) => { if (!hint.contains(e.target as Node) && !anchor.contains(e.target as Node)) done(); };
   addEventListener('pointerdown', away);
-  onSound(on => { if (on) done(); });
+  onSound(() => { if (soundLive()) done(); });
 }
 
 export function demoFlag() {

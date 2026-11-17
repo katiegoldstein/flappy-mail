@@ -1,6 +1,6 @@
 // Chiptune audio, generated live with the Web Audio API (no sound files).
 // Browsers only allow sound after a tap or key press, so nothing plays until then.
-import { soundOn, onSound } from './ui';
+import { soundOn, onSound, setAudioReady } from './ui';
 
 let ctx: AudioContext | null = null;
 let master: GainNode, musicBus: GainNode, sfxBus: GainNode;
@@ -114,6 +114,7 @@ function unlock() {
     unlocked = true;
     for (const ev of GESTURES) removeEventListener(ev, unlock, true);
     if (wantMusic) { wantMusic = false; startMusic(); }
+    setAudioReady();
   }).catch(() => { /* try again on the next tap */ });
 }
 
